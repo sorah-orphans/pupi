@@ -1,0 +1,28 @@
+# Pupi - wiki like git
+
+## Under developing!
+
+## Usage
+
+    $ pupi set name "my name here"
+    $ pupi set email "my email address here"
+
+    $ pupi set show.with_browser true
+    $ pupi set show.browser "open -a Firefox"
+
+    $ pupi set show.with_browser false
+    $ pupi set show.pager less
+
+    $ pupi init
+    $ vim index.mkd
+    $ pupi add index.mkd
+    $ pupi show index.mkd
+
+    $ pupi remote add another /home/tom/tom_pupi
+    $ pupi push another
+
+    $ pupi pull
+
+## Author
+
+- Sora Harakami <http://codnote.net/>
