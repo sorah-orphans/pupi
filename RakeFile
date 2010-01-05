@@ -1,0 +1,13 @@
+begin
+    require 'jeweler'
+    Jeweler::Tasks.new do |g|
+        g.name = "pupi"
+        g.summary = "Pupi is push and pull type (like git) wiki."
+        g.email = "sora134@gmail.com"
+        g.homepage = "http://github.com/sorah/pupi"
+        g.description = "Pupi is push and pull type (like git) wiki."
+        g.authors = ["Sora Harakami"]
+    end
+rescue LoadError
+    puts "Jeweler not available. Run 'gem install jeweler'."
+end
