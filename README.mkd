@@ -16,12 +16,23 @@
     $ pupi init
     $ vim index.mkd
     $ pupi add index.mkd
+    $ pupi commit -m 'initial commit'
     $ pupi show index.mkd
 
-    $ pupi remote add another /home/tom/tom_pupi
-    $ pupi push another
+    $ pupi remote add tom /home/tom/tom_pupi
+    $ pupi push tom
+    $ pupi remote add bob /home/bob/bob_pupi
+    $ pupi status bob
+    $ pupi merge bob
 
-    $ pupi pull
+    $ pupi remote add server http://example.com/pupi/
+    $ pupi push server
+
+
+## Install
+
+I'll push to gemcutter soon.
+Pupi is under developing!
 
 ## Author
 

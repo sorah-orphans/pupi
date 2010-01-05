@@ -1,0 +1,34 @@
+# Pupi - developing memo
+
+## ファイル構成
+
+    .pupi/
+      render/ - html化されたドキュメント
+        $REVISION/
+          file1.html
+        $REVISION2/
+          file2.html
+        $REVISION3/
+          file1.html
+          file2.html
+          file3.html
+      source/ - 原本
+        $REVISION/
+          file1.html
+        $REVISION2/
+          file2.mkd
+        $REVISION3/
+          file1.html
+          file2.mkd
+          file3.txt
+      files - ファイルと現在のrevisionの関連付けするためのファイル
+      commits - コミットした人とコミットコメントとリビジョン番号がはいったファイル
+      tmps - addしたファイルを一時的に記録しておくためのファイル
+
+## commits
+
+    REVISION ADDTIONAL "FILENAME" "COMMITER" COMMENT... ...
+
+## files
+
+    "FILENAME" REVISION ADDITIONAL
