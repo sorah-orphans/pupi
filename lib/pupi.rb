@@ -1,5 +1,6 @@
 class Pupi
     def initialize(d)
+        self.create(d) unless File.exists?("./.pupi")
     end
 
     def self.create(p)
@@ -49,5 +50,14 @@ class Pupi
 
         def status
         end
+    end
+
+    class Config
+        @@config = {}
+        def self.load
+            config = @@config
+            eval(File.load(File.expand_path("~/.pupirc")))
+        end
+        def self.config; @@config; end
     end
 end
