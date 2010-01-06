@@ -18,9 +18,12 @@ Pupi.log = true
 
 def pupi_instance(d=".")
     begin
-        Pupi.new(d)
+        if Pupi.exist?(d)
+            Pupi.new(d)
+        else
+            pupi_instance(d+"/..") unless /^([A-Za-z]:)?[\/\\]/ =~ File.expand_path(d+"/..")
+        end
     rescue ArgumentError
-        pupi_instance(d+"/..") unless /^([A-Za-z]:)?[\/\\]/ =~ File.expand_path(d+"/..")
         abort $!.to_s
     end
 end

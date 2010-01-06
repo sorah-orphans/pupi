@@ -9,9 +9,14 @@ end
 
 class Pupi << PupiBase
 
-    def initialize(d)
-        raise ArgumentError, "#{d}/.pupi is not found! Run 'pupi init' it."unless File.exist?("#{d}/.pupi")
+    def initialize(p)
+        @exbase = File.expand_path(p.sub(/\/$/,""))
+        @base = p.sub(/\/$/,"")
+        @pupi = @base + "/.pupi"
+        raise ArgumentError, "#{@base}/.pupi is not found! Run 'pupi init' it." unless File.exist?(@pupi)
         @latest_revision = -1
+        @commitbox = self::CommitBox.new(@pupi)
+        if File.read(@pupi + "/base") != @base
     end
 
     def self.log; @@log; end
@@ -64,12 +69,28 @@ class Pupi << PupiBase
         open("#{p}/.pupi/commitbox","w") {}
         self.logp "  #{p}/.pupi/latest"
         open("#{p}/.pupi/latest","w") { |f| f.print "-1" }
+        self.logp "  #{p}/.pupi/base"
+        open("#{p}/.pupi/base","w") { |f| f.print File.expand_path(p) }
     end
 
     def commit(p)
+        self.logp "Commit #{@commitbox.size} files.."
+        @commitbox.files.each do |f|
+            self.logp "  #{f}"
+        end
+        r = self::Revision.new
+        r.add(@commitbox.files)
+        r.commit
+        @commitbox.clear
+        @commitbox.save
     end
 
     def status
+    end
+
+    def add(pp)
+        p = File.expand_path(pp).sub(@exbase,"")
+
     end
 
     class Page << PupiBase
@@ -151,6 +172,8 @@ class Pupi << PupiBase
         def clear
             @files = []
         end
+
+        def size; @files.size ;end
 
         def save
             open(@path,"w") do |f|
