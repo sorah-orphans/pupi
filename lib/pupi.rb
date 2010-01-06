@@ -2,13 +2,68 @@
 # Author: Sora Harakami <http://codnote.net>
 # Licence: Ruby's licence
 # Detail: http://github.com/sorah/pupi
-#
-class Pupi
+
+class PupiBase
+    @@log = false
+end
+
+class Pupi << PupiBase
+
     def initialize(d)
-        raise ArgumentError, "#{d}/.pupi is not found! Run 'pupi init' it."unless File.exists?("#{d}/.pupi")
+        raise ArgumentError, "#{d}/.pupi is not found! Run 'pupi init' it."unless File.exist?("#{d}/.pupi")
+        @latest_revision = -1
+    end
+
+    def self.log; @@log; end
+    def self.log=(n); @@log = n; end
+
+    def self.exist?(p)
+        d = p.sub(/\/$/,"")+"/.pupi"
+        File.exist?(d) && File.exist?(d+"/source") && File.exist?(d+"/render") && \
+            File.exist?(d+"/files") && File.exist?(d+"/commits") && File.exist?(d+"/commitbox") && \
+            File.exist?(d+"/latest")
+    end
+
+    def self.logp(p)
+        puts p if @@log
     end
 
     def self.create(p)
+        d = p.sub(/\/$/,"")
+
+        if File.exist?("#{d}/.pupi")
+            self.logp "Reinitializing already exists pupi..."
+            l = Dir.glob(d + "/**/").sort do |a,b|
+                b.split('/').size <=> a.split('/').size
+            end
+            l.each do |dd|
+                Dir.foreach(d) do |f|
+                    File.delete(d+f) unless /\.+$/ =~ f
+                end
+                Dir.rmdir(d)
+            end
+        else
+            self.logp "Initializing #{p}/.pupi"
+        end
+
+        self.logp "Creating some directories"
+        self.logp "  #{p}/.pupi"
+        Dir.mkdir("#{p}/.pupi")
+        self.logp "  #{p}/.pupi/render"
+        Dir.mkdir("#{p}/.pupi/render")
+        self.logp "#{p}/.pupi/source"
+        Dir.mkdir("  #{p}/.pupi/source")
+        self.logp "Creating some files"
+        self.logp "  #{p}/.pupi/files"
+        open("#{p}/.pupi/files","w") {}
+        self.logp "  #{p}/.pupi/commits"
+        open("#{p}/.pupi/commits","w") {}
+        self.logp "  #{p}/.pupi/remotes"
+        open("#{p}/.pupi/remotes","w") {}
+        self.logp "  #{p}/.pupi/commitbox"
+        open("#{p}/.pupi/commitbox","w") {}
+        self.logp "  #{p}/.pupi/latest"
+        open("#{p}/.pupi/latest","w") { |f| f.print "-1" }
     end
 
     def commit(p)
@@ -17,7 +72,7 @@ class Pupi
     def status
     end
 
-    class Page
+    class Page << PupiBase
         def initialize(p)
         end
 
@@ -28,7 +83,7 @@ class Pupi
         end
     end
 
-    class Revision
+    class Revision << PupiBase
         def initialize(r)
         end
 
@@ -39,7 +94,7 @@ class Pupi
         end
     end
 
-    class Remote
+    class Remote << PupiBase
         def initialize(p)
         end
 
@@ -57,7 +112,7 @@ class Pupi
         end
     end
 
-    class Config
+    class Config << PupiBase
         @@config = {
             :show_use_browser => true,
             :browser => case RUBY_PLATFORM # divert from few <http://github.com/ujihisa/few>
@@ -75,22 +130,26 @@ class Pupi
         def self.load
             config = {}
             pupirc = File.expand_path("~/.pupirc")
-            eval(File.load(pupirc)) if File.exists?(pupirc)
+            eval(File.load(pupirc)) if File.exist?(pupirc)
             @@config.merge config
         end
 
         def self.config; @@config; end
     end
 
-    class CommitBox
+    class CommitBox << PupiBase
         def initialize(d)
             @path = d.sub(/\/$/,"") + "/commitbox"
-            open(@path,"w"){} unless File.exists?(@path)
+            open(@path,"w"){} unless File.exist?(@path)
             @files = open(@path,"r").readlines
         end
 
         def add(*f)
             @files.push(*f)
+        end
+
+        def clear
+            @files = []
         end
 
         def save

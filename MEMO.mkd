@@ -25,6 +25,7 @@
       commits - レビジョン
       remotes - remotes
       commitbox - tmp
+      latest - 最新のレビジョンを記録
 
 ## files
 
