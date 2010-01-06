@@ -8,6 +8,7 @@ begin
         g.description = "Pupi is push and pull type (like git) wiki."
         g.authors = ["Sora Harakami"]
     end
+    Jeweler::GemcutterTasks.new
 rescue LoadError
     puts "Jeweler not available. Run 'gem install jeweler'."
 end
