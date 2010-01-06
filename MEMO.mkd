@@ -22,13 +22,27 @@
           file2.mkd
           file3.txt
       files - ファイルと現在のrevisionの関連付けするためのファイル
-      commits - コミットした人とコミットコメントとリビジョン番号がはいったファイル
-      tmps - addしたファイルを一時的に記録しておくためのファイル
-
-## commits
-
-    REVISION ADDTIONAL "FILENAME" "COMMITER" COMMENT... ...
+      commits - レビジョン
+      remotes - remotes
+      tmp - tmp
 
 ## files
 
-    "FILENAME" REVISION ADDITIONAL
+      "FILENAME" MODE LATEST_REVISION
+
+## commits
+
+      REVISION "FILENAME" "COMITTER" "COMMENT"
+
+## remotes
+
+      "NAME" TYPE "URL"
+
+## tmp
+
+      REVISION
+      FILENAME
+      FILENAME
+      FILENAME
+      FILENAME
+      ...
