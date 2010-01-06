@@ -78,7 +78,7 @@ class Pupi << PupiBase
         @commitbox.files.each do |f|
             self.logp "  #{f}"
         end
-        r = self::Revision.new
+        r = self::Revision.new(:pupi => self)
         r.add(@commitbox.files)
         r.commit
         @commitbox.clear
@@ -90,7 +90,8 @@ class Pupi << PupiBase
 
     def add(pp)
         p = File.expand_path(pp).sub(@exbase,"")
-
+        raise ArgumentError, "#{pp} is not found" unless File.exist?(p)
+        @commitbox.add(self::Page.new(p))
     end
 
     class Page << PupiBase
@@ -100,7 +101,13 @@ class Pupi << PupiBase
         def self.create(p)
         end
 
+        def self.exist?(p)
+        end
+
         def save
+        end
+
+        def render
         end
     end
 
