@@ -7,4 +7,42 @@
 # Licence: Ruby's licence
 # Detail: http://github.com/sorah/pupi
 
+require 'pathname'
+$:.unshift(File.symlink?(__FILE__) ? Pathname.new(__FILE__).realpath : __FILE__)
 
+require 'rubygems'
+require 'pupi'
+
+Pupi::Config.load
+
+def pupi_instance
+    begin
+        Pupi.new(".")
+    rescue ArgumentError
+        abort $!.to_s
+    end
+end
+
+case ARGV.shift
+when "help"
+    abort 'write soon'
+when "init"
+    a = ARGV.shift
+    d = a.nil? ? "." : a.sub(/\/$/,"")
+    puts "Creating pupi to #{d}/pupi"
+    Pupi.create(d)
+when "commit"
+    pupi = pupi_instance
+when "add"
+    pupi = pupi_instance
+when "status"
+    pupi = pupi_instance
+when "push"
+    pupi = pupi_instance
+when "pull"
+    pupi = pupi_instance
+when "remote"
+    pupi = pupi_instance
+else
+    abort 'see "pupi help"'
+end
