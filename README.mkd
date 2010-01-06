@@ -4,20 +4,14 @@
 
 ## Usage
 
-    $ pupi set name "my name here"
-    $ pupi set email "my email address here"
-
-    $ pupi set show.with_browser true
-    $ pupi set show.browser "open -a Firefox"
-
-    $ pupi set show.with_browser false
-    $ pupi set show.pager less
+    $ vim ~/.pupirc
 
     $ pupi init
     $ vim index.mkd
     $ pupi add index.mkd
     $ pupi commit -m 'initial commit'
     $ pupi show index.mkd
+    $ pupi server
 
     $ pupi remote add tom /home/tom/tom_pupi
     $ pupi push tom
@@ -37,3 +31,7 @@ Pupi is under developing!
 ## Author
 
 - Sora Harakami <http://codnote.net/>
+
+## License
+
+- Ruby's licence
