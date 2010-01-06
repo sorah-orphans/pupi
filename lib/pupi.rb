@@ -9,6 +9,7 @@ class Pupi
     end
 
     def status()
+    end
 
     class Page
         def initialize(p)
