@@ -1,3 +1,8 @@
+# pupi - wiki like git
+# Author: Sora Harakami <http://codnote.net>
+# Licence: Ruby's licence
+# Detail: http://github.com/sorah/pupi
+#
 class Pupi
     def initialize(d)
         self.create(d) unless File.exists?("./.pupi")

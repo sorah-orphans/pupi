@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+#-*- coding: utf-8 -*-
+# vim: filetype=ruby
+
+# pupi - wiki like git
+# Author: Sora Harakami <http://codnote.net>
+# Licence: Ruby's licence
+# Detail: http://github.com/sorah/pupi
+
+
