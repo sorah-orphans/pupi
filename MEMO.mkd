@@ -24,7 +24,7 @@
       files - ファイルと現在のrevisionの関連付けするためのファイル
       commits - レビジョン
       remotes - remotes
-      tmp - tmp
+      commitbox - tmp
 
 ## files
 
@@ -40,7 +40,6 @@
 
 ## tmp
 
-      REVISION
       FILENAME
       FILENAME
       FILENAME
