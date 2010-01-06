@@ -1,4 +1,6 @@
-# Pupi - wiki like git
+# Pupi - git like wiki
+
+Pupi is git like wiki. It support push, pull and commit.
 
 ## Under developing!
 
