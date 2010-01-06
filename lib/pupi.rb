@@ -58,11 +58,27 @@ class Pupi
     end
 
     class Config
-        @@config = {}
+        @@config = {
+            :show_use_browser => true,
+            :browser => case RUBY_PLATFORM
+                        when /darwin/
+                            "open"
+                        when /mswin(?!ce)|mingw|cygwin|bccwin/
+                            "start"
+                        else
+                            "firefox"
+                        end,
+            :name => 'anonymous',
+            :email => ""
+        }
+
         def self.load
-            config = @@config
-            eval(File.load(File.expand_path("~/.pupirc")))
+            config = {}
+            pupirc = File.expand_path("~/.pupirc")
+            eval(File.load(pupirc)) if File.exists?(pupirc)
+            @@config.merge config
         end
+
         def self.config; @@config; end
     end
 end
