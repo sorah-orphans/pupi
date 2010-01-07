@@ -38,6 +38,9 @@ describe 'Pupi class' do
   it 'create page and commit' do
   end
 
+  it 'check create page execption' do
+  end
+
   it 'show page' do
   end
 
