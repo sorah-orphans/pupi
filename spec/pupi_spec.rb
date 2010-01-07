@@ -52,6 +52,11 @@ describe 'Pupi class' do
   end
 
   it 'show source (a /index)' do
+    @a.show_source("/index").chomp.should match('a - index')
+  end
+
+  it 'show page (a /index)' do
+    @a.show("/index").chomp.should match('<p>a - index</p>')
   end
 
   it 'create another page and check rendered page' do
