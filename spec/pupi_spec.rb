@@ -76,24 +76,39 @@ describe 'Pupi class' do
     l = @a.log
     l[0]["revision"].should == 0
     l[0]["comment"].should match('initial commit')
-    l[0]["files"][0].should == '/index'
+    l[0]["pages"][0].name.should == '/index'
     l[0]["name"].should == 'speccer'
     l[1]["revision"].should == 1
     l[1]["comment"].should match('add hi.mkd')
-    l[1]["files"][0].should == '/index'
+    l[1]["pages"][0].path.should == '/hi'
     l[1]["name"].should == 'speccer'
   end
 
-  it 'push to another puki' do
+  it 'pull from another pupi (a -> b)' do
+    @b.pull("./spec_tmp/a")
+    File.exist?("./spec_tmp/b/index.txt").should be_true
+    File.exist?("./spec_tmp/b/hi.mkd").should be_true
   end
 
-  it 'pull from another puki' do
+  it 'check log (b)' do
+    l = @b.log
+    l[0]["revision"].should == 0
+    l[0]["comment"].should match('initial commit')
+    l[0]["files"][0].name.should == '/index'
+    l[0]["name"].should == 'speccer'
+    l[1]["revision"].should == 1
+    l[1]["comment"].should match('add hi.mkd')
+    l[1]["pages"][0].path.should == '/hi'
+    l[1]["name"].should == 'speccer'
   end
 
-  it 'merge another puki changes' do
+  it 'push to another pupi' do
   end
 
-  it 'clone another puki' do
+  it 'merge another pupi changes' do
+  end
+
+  it 'clone another pupi' do
   end
 
   after do
