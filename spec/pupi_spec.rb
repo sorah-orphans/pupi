@@ -1,4 +1,5 @@
 require 'lib/pupi.rb'
+require 'tempfile'
 
 describe 'Pupi class' do
   before do
@@ -35,10 +36,14 @@ describe 'Pupi class' do
     File.exist?(a + '/commitbox').should == true
   end
 
-  it 'create page and commit' do
+  it 'check create page execption' do
+    open("./spec_tmp/hey","w") do |f|
+      f.puts "hey"
+    end
+    lambda { Pupi.add("./spec_tmp/hey") }.should raise_error(ArgumentError)
   end
 
-  it 'check create page execption' do
+  it 'create page and commit' do
   end
 
   it 'show page' do
