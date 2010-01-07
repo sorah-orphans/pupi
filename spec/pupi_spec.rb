@@ -46,6 +46,12 @@ describe 'Pupi class' do
     lambda { @a.add("./spec_tmp/hey") }.should raise_error(ArgumentError)
   end
 
+  it 'Pupi#pages' do
+    ps = @a.pages.map{ |p| p.name }
+    ps.include('/index').should be_true
+    ps.include('/hi').should be_true
+  end
+
   it 'create page and commit (a)' do
     open("./spec_tmp/a/index.txt","w") do |f|
       f.puts "a - index" 
@@ -86,6 +92,9 @@ describe 'Pupi class' do
 
   it 'pull from another pupi (a -> b)' do
     @b.pull("./spec_tmp/a")
+    ps = @b.pages.map{ |p| p.name }
+    ps.include('/index').should be_true
+    ps.include('/hi').should be_true
     File.exist?("./spec_tmp/b/index.txt").should be_true
     File.exist?("./spec_tmp/b/hi.mkd").should be_true
   end
@@ -102,7 +111,12 @@ describe 'Pupi class' do
     l[1]["name"].should == 'speccer'
   end
 
+  it 'make another page (b /vi)' do
+
+  end
+
   it 'push to another pupi' do
+
   end
 
   it 'merge another pupi changes' do
