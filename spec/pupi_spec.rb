@@ -11,6 +11,28 @@ describe 'Pupi class' do
   end
 
   it 'files and directories is correct' do
+    # check @a
+    a = './spec_tmp/a/.pupi'
+    File.exist?(a               ).should == true
+    File.exist?(a + '/render'   ).should == true
+    File.exist?(a + '/source'   ).should == true
+    File.exist?(a + '/base'     ).should == true
+    File.exist?(a + '/files'    ).should == true
+    File.exist?(a + '/commits'  ).should == true
+    File.exist?(a + '/latest'   ).should == true
+    File.exist?(a + '/remotes'  ).should == true
+    File.exist?(a + '/commitbox').should == true
+    # check @b
+    a = './spec_tmp/b/.pupi'
+    File.exist?(a               ).should == true
+    File.exist?(a + '/render'   ).should == true
+    File.exist?(a + '/source'   ).should == true
+    File.exist?(a + '/base'     ).should == true
+    File.exist?(a + '/files'    ).should == true
+    File.exist?(a + '/commits'  ).should == true
+    File.exist?(a + '/latest'   ).should == true
+    File.exist?(a + '/remotes'  ).should == true
+    File.exist?(a + '/commitbox').should == true
   end
 
   it 'create page and commit' do
