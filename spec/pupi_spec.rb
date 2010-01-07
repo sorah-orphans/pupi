@@ -7,6 +7,9 @@ describe 'Pupi class' do
     Dir.mkdir("./spec_tmp/a")
     Dir.mkdir("./spec_tmp/b")
     Dir.mkdir("./spec_tmp/c")
+    Pupi.set_config do |c|
+      c[:name] = "speccer"
+    end
     @a = Pupi.create('./spec_tmp/a')
     @b = Pupi.create('./spec_tmp/b')
   end
@@ -14,26 +17,26 @@ describe 'Pupi class' do
   it 'files and directories is correct' do
     # check @a
     a = './spec_tmp/a/.pupi'
-    File.exist?(a               ).should == true
-    File.exist?(a + '/render'   ).should == true
-    File.exist?(a + '/source'   ).should == true
-    File.exist?(a + '/base'     ).should == true
-    File.exist?(a + '/files'    ).should == true
-    File.exist?(a + '/commits'  ).should == true
-    File.exist?(a + '/latest'   ).should == true
-    File.exist?(a + '/remotes'  ).should == true
-    File.exist?(a + '/commitbox').should == true
+    File.exist?(a               ).should be_true
+    File.exist?(a + '/render'   ).should be_true
+    File.exist?(a + '/source'   ).should be_true
+    File.exist?(a + '/base'     ).should be_true
+    File.exist?(a + '/files'    ).should be_true
+    File.exist?(a + '/commits'  ).should be_true
+    File.exist?(a + '/latest'   ).should be_true
+    File.exist?(a + '/remotes'  ).should be_true
+    File.exist?(a + '/commitbox').should be_true
     # check @b
     a = './spec_tmp/b/.pupi'
-    File.exist?(a               ).should == true
-    File.exist?(a + '/render'   ).should == true
-    File.exist?(a + '/source'   ).should == true
-    File.exist?(a + '/base'     ).should == true
-    File.exist?(a + '/files'    ).should == true
-    File.exist?(a + '/commits'  ).should == true
-    File.exist?(a + '/latest'   ).should == true
-    File.exist?(a + '/remotes'  ).should == true
-    File.exist?(a + '/commitbox').should == true
+    File.exist?(a               ).should be_true
+    File.exist?(a + '/render'   ).should be_true
+    File.exist?(a + '/source'   ).should be_true
+    File.exist?(a + '/base'     ).should be_true
+    File.exist?(a + '/files'    ).should be_true
+    File.exist?(a + '/commits'  ).should be_true
+    File.exist?(a + '/latest'   ).should be_true
+    File.exist?(a + '/remotes'  ).should be_true
+    File.exist?(a + '/commitbox').should be_true
   end
 
   it 'check create page execption' do
@@ -52,11 +55,11 @@ describe 'Pupi class' do
   end
 
   it 'show source (a /index)' do
-    @a.show_source("/index").chomp.should match('a - index')
+    @a.show_source("/index").should match('a - index')
   end
 
   it 'show page (a /index)' do
-    @a.show("/index").chomp.should match('<p>a - index</p>')
+    @a.show("/index").should match('<p>a - index</p>')
   end
 
   it 'create another page (a /hi)' do
@@ -70,6 +73,15 @@ describe 'Pupi class' do
   end
 
   it 'check log (a)' do
+    l = @a.log
+    l[0]["revision"].should == 0
+    l[0]["comment"].should match('initial commit')
+    l[0]["files"][0].should == '/index'
+    l[0]["name"].should == 'speccer'
+    l[1]["revision"].should == 1
+    l[1]["comment"].should match('add hi.mkd')
+    l[1]["files"][0].should == '/index'
+    l[1]["name"].should == 'speccer'
   end
 
   it 'push to another puki' do
