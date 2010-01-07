@@ -59,7 +59,17 @@ describe 'Pupi class' do
     @a.show("/index").chomp.should match('<p>a - index</p>')
   end
 
-  it 'create another page and check rendered page' do
+  it 'create another page (a /hi)' do
+    open("./spec_tmp/a/hi.mkd", "w") do |f|
+      f.puts "# hi"
+      f.puts "\nhi"
+    end
+
+    @a.add("./spec_tmp/a/hi.mkd")
+    @a.commit("add hi.mkd")
+  end
+
+  it 'check log (a)' do
   end
 
   it 'push to another puki' do
