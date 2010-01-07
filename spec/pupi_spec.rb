@@ -112,18 +112,30 @@ describe 'Pupi class' do
   end
 
   it 'make another page (b /vi)' do
-
+    open("./spec_tmp/b/hey.html",'w') do |f|
+      f.puts "<p>hey</p>"
+    end
+    @b.add("./spec_tmp/b/hey.html")
+    @b.commit("add hey.html")
   end
 
-  it 'push to another pupi' do
-
+  it 'add remote pupi' do
+    @a.add_remote(
+      :name => 'b',
+      :path => './spec_tmp/b'
+    )
   end
 
-  it 'merge another pupi changes' do
-  end
+  it 'pull another pupi (b -> a)'
 
-  it 'clone another pupi' do
-  end
+  it 'merge another pupi changes'
+
+  it 'clone another pupi'
+
+
+  # In future...
+  it 'initialize bare pupi'
+  it 'push to bare pupi'
 
   after do
     # thanks to http://www.namaraii.com/rubytips/?%A5%C7%A5%A3%A5%EC%A5%AF%A5%C8%A5%EA#l2
