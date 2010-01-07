@@ -40,13 +40,18 @@ describe 'Pupi class' do
     open("./spec_tmp/hey","w") do |f|
       f.puts "hey"
     end
-    lambda { Pupi.add("./spec_tmp/hey") }.should raise_error(ArgumentError)
+    lambda { @a.add("./spec_tmp/hey") }.should raise_error(ArgumentError)
   end
 
-  it 'create page and commit' do
+  it 'create page and commit (a)' do
+    open("./spec_tmp/a/index.txt","w") do |f|
+      f.puts "a - index" 
+    end
+    @a.add("./spec_tmp/a/index.txt")
+    @a.commit("initial commit")
   end
 
-  it 'show page' do
+  it 'show source (a /index)' do
   end
 
   it 'create another page and check rendered page' do
