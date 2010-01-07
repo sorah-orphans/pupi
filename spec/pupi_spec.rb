@@ -62,10 +62,12 @@ describe 'Pupi class' do
 
   it 'show source (a /index)' do
     @a.show_source("/index").should match('a - index')
+    @a.show_source("/").should match('a - index')
   end
 
   it 'show page (a /index)' do
     @a.show("/index").should match('<p>a - index</p>')
+    @a.show("/").should match('<p>a - index</p>')
   end
 
   it 'create another page (a /hi)' do
@@ -128,9 +130,17 @@ describe 'Pupi class' do
 
   it 'pull another pupi (b -> a)'
 
-  it 'merge another pupi changes'
+  it 'clone another pupi (a -> c)'
 
-  it 'clone another pupi'
+  it 'fix page (c /hi)'
+  it 'fix page (a /hi)'
+
+  it 'merge another pupi changes (c -> a)'
+
+  it "fix page (a /index)"
+  it "fix page (b /index)"
+  it "merge confict another pupi changes (b -> a)"
+
 
 
   # In future...
