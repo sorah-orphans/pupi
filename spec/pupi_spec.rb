@@ -137,7 +137,25 @@ describe 'Pupi class' do
     @a.log[2]["name"].should == 'speccer'
   end
 
-  it 'clone another pupi (a -> c)'
+  it 'clone another pupi (a -> c)' do
+    @c = Pupi.clone("./spec_tmp/a","./spec_tmp/c")
+    File.exist?('./spec_tmp/c/index.txt').should be_true
+    File.exist?('./spec_tmp/c/hi.mkd').should be_true
+    File.exist?('./spec_tmp/c/hey.html').should be_true
+    l = @c.log
+    l[0]["revision"].should == 0
+    l[0]["comment"].should match('initial commit')
+    l[0]["files"][0].name.should == '/index'
+    l[0]["name"].should == 'speccer'
+    l[1]["revision"].should == 1
+    l[1]["comment"].should match('add hi.mkd')
+    l[1]["pages"][0].path.should == '/hi'
+    l[1]["name"].should == 'speccer'
+    l[2]["revision"].should == 2
+    l[2]["comment"].should == 'add hey.html'
+    l[2]["pages"][0].path.should == '/hey.html'
+    l[2]["name"].should == 'speccer'
+  end
 
   it 'fix page (c /hi)'
   it 'fix page (a /hi)'
