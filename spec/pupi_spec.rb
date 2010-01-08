@@ -129,12 +129,28 @@ describe 'Pupi class' do
   end
 
   it 'pull another pupi (b -> a)' do
-    @a.pull('b')
+    @a.pull('b').should == :success
     File.exist?('./spec_tmp/a/hey.html').should be_true
     @a.log[2]["revision"].should == 2
     @a.log[2]["comment"].should == 'add hey.html'
     @a.log[2]["pages"][0].path.should == '/hey.html'
     @a.log[2]["name"].should == 'speccer'
+  end
+
+  it 'fix page (a /index)' do
+    open("./spec_tmp/a/index.txt","w") do |f|
+      f.puts "hi. this is @a pupi."
+    end
+    @a.add('./spec_tmp/a/index.txt')
+    @a.commit('fix index')
+  end
+
+  it 'fix page (b /index)' do
+    open("./spec_tmp/b/index.txt","a") do |f|
+      f.puts "this line is added by b"
+    end
+    @b.add('./spec_tmp/b/index.txt')
+    @a.commit('added line 2')
   end
 
   it 'clone another pupi (a -> c)' do
