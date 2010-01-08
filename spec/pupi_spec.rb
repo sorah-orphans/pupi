@@ -200,7 +200,23 @@ describe 'Pupi class' do
     @c.commit("konnnitiha")
   end
 
-  it 'merge another pupi changes (c -> a)'
+  it 'merge another pupi changes (c -> a)' do 
+    @a.pull("./spec_tmp/a").should == :need_merge
+    @a.diff("./spec_tmp/a").should be_true
+    l = open("./spec_tmp/a/hi.mkd","r") {|f| f.readlines }
+    l[0].should match('<<<<<<<')
+    l[1].should match('# hi: connnitiha')
+    l[2].should match('=======')
+    l[3].should match('# hi yey yey yey')
+    l[4].should match('>>>>>>>')
+    
+    open("./spec_tmp/a/hi.mkd","w") do |f|
+      f.puts "# hi: connnitiha yey!"
+    end
+
+    @a.add("./spec_tmp/a/hi.mkd")
+    @a.commit()
+  end
 
   it "fix page (a /)"
   it "fix page (b /)"
@@ -211,6 +227,7 @@ describe 'Pupi class' do
   # In future...
   it 'initialize bare pupi'
   it 'push to bare pupi'
+  it 'fetch another pupi'
 
   after do
     # thanks to http://www.namaraii.com/rubytips/?%A5%C7%A5%A3%A5%EC%A5%AF%A5%C8%A5%EA#l2
