@@ -188,11 +188,17 @@ describe 'Pupi class' do
     open("./spec_tmp/c/hi.mkd","w") do |f|
       f.puts "# hi yey yey yey"
     end
-    @c.add("./spec_tmp/hi.mkd")
+    @c.add("./spec_tmp/c/hi.mkd")
     @c.commit("yey")
   end
 
-  it 'fix page (a /hi)'
+  it 'fix page (a /hi)' do
+    open("./spec_tmp/a/hi.mkd","w") do |f|
+      f.puts "# hi: konnnitiha"
+    end
+    @c.add("./spec_tmp/a/hi.mkd")
+    @c.commit("konnnitiha")
+  end
 
   it 'merge another pupi changes (c -> a)'
 
