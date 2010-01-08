@@ -139,7 +139,7 @@ describe 'Pupi class' do
 
   it 'fix page (a /index)' do
     open("./spec_tmp/a/index.txt","w") do |f|
-      f.puts "hi. this is @a pupi."
+      f.puts "hi. this is a pupi"
     end
     @a.add('./spec_tmp/a/index.txt')
     @a.commit('fix index')
@@ -151,6 +151,13 @@ describe 'Pupi class' do
     end
     @b.add('./spec_tmp/b/index.txt')
     @a.commit('added line 2')
+  end
+
+  it 'pull and merge another pupi (but not conflict) (b -> a)' do
+    @a.pull('b').should == :merge_not_conflict
+    l = open('./spec_tmp/a/index.txt','r') {|f| f.readlines }
+    l[0].should match('hi. this is a pupi')
+    l[1].should match('this line is added by b')
   end
 
   it 'clone another pupi (a -> c)' do
