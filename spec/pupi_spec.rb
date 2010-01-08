@@ -48,8 +48,8 @@ describe 'Pupi class' do
 
   it 'Pupi#pages' do
     ps = @a.pages.map{ |p| p.name }
-    ps.include('/index').should be_true
-    ps.include('/hi').should be_true
+    ps.should include('/index')
+    ps.should include('/hi')
   end
 
   it 'create page and commit (a)' do
@@ -113,7 +113,7 @@ describe 'Pupi class' do
     l[1]["name"].should == 'speccer'
   end
 
-  it 'make another page (b /vi)' do
+  it 'make another page (b /hey)' do
     open("./spec_tmp/b/hey.html",'w') do |f|
       f.puts "<p>hey</p>"
     end
@@ -128,7 +128,14 @@ describe 'Pupi class' do
     )
   end
 
-  it 'pull another pupi (b -> a)'
+  it 'pull another pupi (b -> a)' do
+    @a.pull('b')
+    File.exist?('./spec_tmp/a/hey.html').should be_true
+    @a.log[2]["revision"].should == 2
+    @a.log[2]["comment"].should == 'add hey.html'
+    @a.log[2]["pages"][0].path.should == '/hey.html'
+    @a.log[2]["name"].should == 'speccer'
+  end
 
   it 'clone another pupi (a -> c)'
 
