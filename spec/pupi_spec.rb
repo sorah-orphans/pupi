@@ -48,7 +48,7 @@ describe 'Pupi class' do
 
   it 'Pupi#pages' do
     ps = @a.pages.map{ |p| p.name }
-    ps.should include('/index')
+    ps.should include('/')
     ps.should include('/hi')
   end
 
@@ -60,13 +60,13 @@ describe 'Pupi class' do
     @a.commit("initial commit")
   end
 
-  it 'show source (a /index)' do
-    @a.show_source("/index").should match('a - index')
+  it 'show source (a /)' do
+    @a.show_source("/").should match('a - index')
     @a.show_source("/").should match('a - index')
   end
 
-  it 'show page (a /index)' do
-    @a.show("/index").should match('<p>a - index</p>')
+  it 'show page (a /)' do
+    @a.show("/").should match('<p>a - index</p>')
     @a.show("/").should match('<p>a - index</p>')
   end
 
@@ -84,7 +84,7 @@ describe 'Pupi class' do
     l = @a.log
     l[0]["revision"].should == 0
     l[0]["comment"].should match('initial commit')
-    l[0]["pages"][0].name.should == '/index'
+    l[0]["pages"][0].name.should == '/'
     l[0]["name"].should == 'speccer'
     l[1]["revision"].should == 1
     l[1]["comment"].should match('add hi.mkd')
@@ -95,7 +95,7 @@ describe 'Pupi class' do
   it 'pull from another pupi (a -> b)' do
     @b.pull("./spec_tmp/a")
     ps = @b.pages.map{ |p| p.name }
-    ps.include('/index').should be_true
+    ps.include('/').should be_true
     ps.include('/hi').should be_true
     File.exist?("./spec_tmp/b/index.txt").should be_true
     File.exist?("./spec_tmp/b/hi.mkd").should be_true
@@ -105,7 +105,7 @@ describe 'Pupi class' do
     l = @b.log
     l[0]["revision"].should == 0
     l[0]["comment"].should match('initial commit')
-    l[0]["files"][0].name.should == '/index'
+    l[0]["files"][0].name.should == '/'
     l[0]["name"].should == 'speccer'
     l[1]["revision"].should == 1
     l[1]["comment"].should match('add hi.mkd')
@@ -137,7 +137,7 @@ describe 'Pupi class' do
     @a.log[2]["name"].should == 'speccer'
   end
 
-  it 'fix page (a /index)' do
+  it 'fix page (a /)' do
     open("./spec_tmp/a/index.txt","w") do |f|
       f.puts "hi. this is a pupi"
     end
@@ -145,7 +145,7 @@ describe 'Pupi class' do
     @a.commit('fix index')
   end
 
-  it 'fix page (b /index)' do
+  it 'fix page (b /)' do
     open("./spec_tmp/b/index.txt","a") do |f|
       f.puts "this line is added by b"
     end
@@ -168,7 +168,7 @@ describe 'Pupi class' do
     l = @c.log
     l[0]["revision"].should == 0
     l[0]["comment"].should match('initial commit')
-    l[0]["files"][0].name.should == '/index'
+    l[0]["files"][0].name.should == '/'
     l[0]["name"].should == 'speccer'
     l[1]["revision"].should == 1
     l[1]["comment"].should match('add hi.mkd')
@@ -176,17 +176,28 @@ describe 'Pupi class' do
     l[1]["name"].should == 'speccer'
     l[2]["revision"].should == 2
     l[2]["comment"].should == 'add hey.html'
-    l[2]["pages"][0].path.should == '/hey.html'
+    l[2]["pages"][0].path.should == '/hey'
     l[2]["name"].should == 'speccer'
+    l[3]["revision"].should == 3
+    l[3]["comment"].should == 'fix index'
+    l[3]["pages"][0].path.should == '/'
+    l[3]["name"].should == 'speccer'
   end
 
-  it 'fix page (c /hi)'
+  it 'fix page (c /hi)' do
+    open("./spec_tmp/c/hi.mkd","w") do |f|
+      f.puts "# hi yey yey yey"
+    end
+    @c.add("./spec_tmp/hi.mkd")
+    @c.commit("yey")
+  end
+
   it 'fix page (a /hi)'
 
   it 'merge another pupi changes (c -> a)'
 
-  it "fix page (a /index)"
-  it "fix page (b /index)"
+  it "fix page (a /)"
+  it "fix page (b /)"
   it "merge confict another pupi changes (b -> a)"
 
 
