@@ -1,4 +1,4 @@
-require 'lib/pupi.rb'
+require './lib/pupi.rb'
 require 'tempfile'
 
 describe 'Pupi class' do
