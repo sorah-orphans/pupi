@@ -14,6 +14,11 @@ describe 'Pupi class' do
     @b = Pupi.create('./spec_tmp/b')
   end
 
+  it 'Pupi.create returns Pupi instance' do
+    @a.should be_a_kind_of(Pupi)
+    @b.should be_a_kind_of(Pupi)
+  end
+
   it 'files and directories is correct' do
     # check @a
     a = './spec_tmp/a/.pupi'
@@ -62,11 +67,9 @@ describe 'Pupi class' do
 
   it 'show source (a /)' do
     @a.show_source("/").should match('a - index')
-    @a.show_source("/").should match('a - index')
   end
 
   it 'show page (a /)' do
-    @a.show("/").should match('<p>a - index</p>')
     @a.show("/").should match('<p>a - index</p>')
   end
 
@@ -200,7 +203,7 @@ describe 'Pupi class' do
     @c.commit("konnnitiha")
   end
 
-  it 'merge another pupi changes (c -> a)' do 
+  it 'merge conflict another pupi changes (c -> a)' do 
     @a.pull("./spec_tmp/a").should == :need_merge
     @a.diff("./spec_tmp/a").should be_true
     l = open("./spec_tmp/a/hi.mkd","r") {|f| f.readlines }
@@ -218,15 +221,81 @@ describe 'Pupi class' do
     @a.commit()
   end
 
-  it "fix page (a /)"
-  it "fix page (b /)"
-  it "merge confict another pupi changes (b -> a)"
+  it 'check Pupi#pages' do
+    @a.pages.should be_a_kind_of(Array)
+    @a.pages.each do |f|
+      f.should be_a_kind_of(Pupi::Page)
+    end
+  end
 
+  it 'check Pupi::Page#path' do
+    p = @a.pages.map{ |p| p.path }
+    p.should include('/')
+    p.should include('/hi')
+    p.should include('/hey')
+  end
 
+  it 'check Pupi#latest_revision' do
+    fs = @a.pages
+    fs.each do |f|
+      case f.path
+      when "/"
+        f.latest_revision.should == 4
+      when "/hi"
+        f.latest_revision.should == 7
+      when "/hey"
+        f.latest_revision.should == 2
+      end
+    end
+  end
 
   # In future...
-  it 'initialize bare pupi'
-  it 'push to bare pupi'
+  it 'initialize bare pupi' do
+    s = Pupi.create("./spec_tmp/bare.pupi") # If directory name ext is .pupi, It reconize bare pupi automatic.
+
+    a = './spec_tmp/bare.pupi'
+    File.exist?(a               ).should be_true
+    File.exist?(a + '/render'   ).should be_true
+    File.exist?(a + '/source'   ).should be_true
+    File.exist?(a + '/base'     ).should be_true
+    File.exist?(a + '/files'    ).should be_true
+    File.exist?(a + '/commits'  ).should be_true
+    File.exist?(a + '/latest'   ).should be_true
+    File.exist?(a + '/bare'     ).should be_true
+  end
+
+  it 'make bare pupi use clone (a -> master.pupi)' do
+    @m = Pupi.clone("./spec_tmp/a","./spec_tmp/master.pupi") # If directory ext is .pupi, It reconize bare pupi automatic.
+    a = './spec_tmp/master.pupi'
+    File.exist?(a               ).should be_true
+    File.exist?(a + '/render'   ).should be_true
+    File.exist?(a + '/render/0' ).should be_true
+    File.exist?(a + '/render/1' ).should be_true
+    File.exist?(a + '/render/2' ).should be_true
+    File.exist?(a + '/render/3' ).should be_true
+    File.exist?(a + '/render/4' ).should be_true
+    File.exist?(a + '/render/5' ).should be_true
+    File.exist?(a + '/render/6' ).should be_true
+    File.exist?(a + '/render/7' ).should be_true
+    File.exist?(a + '/source'   ).should be_true
+    File.exist?(a + '/source/0' ).should be_true
+    File.exist?(a + '/source/1' ).should be_true
+    File.exist?(a + '/source/2' ).should be_true
+    File.exist?(a + '/source/3' ).should be_true
+    File.exist?(a + '/source/4' ).should be_true
+    File.exist?(a + '/source/5' ).should be_true
+    File.exist?(a + '/source/6' ).should be_true
+    File.exist?(a + '/source/7' ).should be_true
+    File.exist?(a + '/base'     ).should be_true
+    File.exist?(a + '/files'    ).should be_true
+    File.exist?(a + '/commits'  ).should be_true
+    File.exist?(a + '/latest'   ).should be_true
+    File.exist?(a + '/bare'     ).should be_true
+  end
+
+  it 'push to bare pupi' do
+  end
+
   it 'fetch another pupi'
 
   after do
