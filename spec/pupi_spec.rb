@@ -85,14 +85,14 @@ describe 'Pupi class' do
 
   it 'check log (a)' do
     l = @a.log
-    l[0]["revision"].should == 0
-    l[0]["comment"].should match('initial commit')
-    l[0]["pages"][0].name.should == '/'
-    l[0]["name"].should == 'speccer'
-    l[1]["revision"].should == 1
-    l[1]["comment"].should match('add hi.mkd')
-    l[1]["pages"][0].path.should == '/hi'
-    l[1]["name"].should == 'speccer'
+    l[0][:revision].should == 0
+    l[0][:comment].should match('initial commit')
+    l[0][:pages][0].name.should == '/'
+    l[0][:name].should == 'speccer'
+    l[1][:revision].should == 1
+    l[1][:comment].should match('add hi.mkd')
+    l[1][:pages][0].path.should == '/hi'
+    l[1][:name].should == 'speccer'
   end
 
   it 'pull from another pupi (a -> b)' do
@@ -106,14 +106,14 @@ describe 'Pupi class' do
 
   it 'check log (b)' do
     l = @b.log
-    l[0]["revision"].should == 0
-    l[0]["comment"].should match('initial commit')
-    l[0]["files"][0].name.should == '/'
-    l[0]["name"].should == 'speccer'
-    l[1]["revision"].should == 1
-    l[1]["comment"].should match('add hi.mkd')
-    l[1]["pages"][0].path.should == '/hi'
-    l[1]["name"].should == 'speccer'
+    l[0][:revision].should == 0
+    l[0][:comment].should match('initial commit')
+    l[0][:files][0].name.should == '/'
+    l[0][:name].should == 'speccer'
+    l[1][:revision].should == 1
+    l[1][:comment].should match('add hi.mkd')
+    l[1][:pages][0].path.should == '/hi'
+    l[1][:name].should == 'speccer'
   end
 
   it 'make another page (b /hey)' do
@@ -134,10 +134,10 @@ describe 'Pupi class' do
   it 'pull another pupi (b -> a)' do
     @a.pull('b').should == :success
     File.exist?('./spec_tmp/a/hey.html').should be_true
-    @a.log[2]["revision"].should == 2
-    @a.log[2]["comment"].should == 'add hey.html'
-    @a.log[2]["pages"][0].path.should == '/hey.html'
-    @a.log[2]["name"].should == 'speccer'
+    @a.log[2][:revision].should == 2
+    @a.log[2][:comment].should == 'add hey.html'
+    @a.log[2][:pages][0].path.should == '/hey.html'
+    @a.log[2][:name].should == 'speccer'
   end
 
   it 'fix page (a /)' do
@@ -169,22 +169,22 @@ describe 'Pupi class' do
     File.exist?('./spec_tmp/c/hi.mkd').should be_true
     File.exist?('./spec_tmp/c/hey.html').should be_true
     l = @c.log
-    l[0]["revision"].should == 0
-    l[0]["comment"].should match('initial commit')
-    l[0]["files"][0].name.should == '/'
-    l[0]["name"].should == 'speccer'
-    l[1]["revision"].should == 1
-    l[1]["comment"].should match('add hi.mkd')
-    l[1]["pages"][0].path.should == '/hi'
-    l[1]["name"].should == 'speccer'
-    l[2]["revision"].should == 2
-    l[2]["comment"].should == 'add hey.html'
-    l[2]["pages"][0].path.should == '/hey'
-    l[2]["name"].should == 'speccer'
-    l[3]["revision"].should == 3
-    l[3]["comment"].should == 'fix index'
-    l[3]["pages"][0].path.should == '/'
-    l[3]["name"].should == 'speccer'
+    l[0][:revision].should == 0
+    l[0][:comment].should match('initial commit')
+    l[0][:files][0].name.should == '/'
+    l[0][:name].should == 'speccer'
+    l[1][:revision].should == 1
+    l[1][:comment].should match('add hi.mkd')
+    l[1][:pages][0].path.should == '/hi'
+    l[1][:name].should == 'speccer'
+    l[2][:revision].should == 2
+    l[2][:comment].should == 'add hey.html'
+    l[2][:pages][0].path.should == '/hey'
+    l[2][:name].should == 'speccer'
+    l[3][:revision].should == 3
+    l[3][:comment].should == 'fix index'
+    l[3][:pages][0].path.should == '/'
+    l[3][:name].should == 'speccer'
   end
 
   it 'fix page (c /hi)' do
@@ -293,10 +293,35 @@ describe 'Pupi class' do
     File.exist?(a + '/bare'     ).should be_true
   end
 
-  it 'push to bare pupi' do
+  it 'push to not bare pupi (check exeption)' do
+    lambda do
+      @a.push("./spec_tmp/b")
+    end.should raise_error(ArgumentError) 
   end
 
-  it 'fetch another pupi'
+  it 'push to bare pupi' do
+    @a.push("./spec_tmp/master.pupi").should == :up_to_date
+  end
+
+  it 'fix /hey (c)' do
+    open("./spec_tmp/c/hey.html","w") do |f|
+      f.puts "hey yey hey yey!"
+    end
+
+    @c.add("./spec_tmp/c/hey.html")
+    @c.commit("yey")
+  end
+
+  it 'push to bare' do
+    @c.push('./spec_tmp/master.pupi').should == :pushed
+  end
+
+  it 'fetch another pupi and pull' do
+    l = @a.fetch("./spec_tmp/master.pupi")[0]
+    l[:comment].should == "yey"
+    @a.pull(:fetch)
+  end
+
 
   after do
     # thanks to http://www.namaraii.com/rubytips/?%A5%C7%A5%A3%A5%EC%A5%AF%A5%C8%A5%EA#l2
